@@ -20,10 +20,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class SchedulerMain {
 
     final static Logger logger = LoggerFactory.getLogger(SchedulerMain.class);
-    final static ConnectionFactory factory = new ConnectionFactory();
     
     public static void main(String[] args) throws Exception {
-        factory.setUri(System.getenv("CLOUDAMQP_URL"));
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
 
         scheduler.start();
@@ -42,23 +40,12 @@ public class SchedulerMain {
         
         @Override
         public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            
+            logger.info("HelloJob executed");
             try {
-                Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel();
-                String queueName = "work-queue-1";
-                Map<String, Object> params = new HashMap<String, Object>();
-                params.put("x-ha-policy", "all");
-                channel.queueDeclare(queueName, true, false, false, params);
-
-                String msg = "Sent at:" + System.currentTimeMillis();
-                byte[] body = msg.getBytes("UTF-8");
-                channel.basicPublish("", queueName, MessageProperties.PERSISTENT_TEXT_PLAIN, body);
-                logger.info("Message Sent: " + msg);
-                connection.close();
+                
             }
             catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                
             }
 
         }
