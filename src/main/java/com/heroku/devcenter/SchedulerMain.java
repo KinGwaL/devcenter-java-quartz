@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.Timestamp;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.repeatSecondlyForever;
@@ -23,7 +24,7 @@ public class SchedulerMain {
 
         scheduler.start();
 
-        JobDetail jobDetail = newJob(HelloJob.class).build();
+        JobDetail jobDetail = newJob(DailyScheduleJob.class).build();
         
         Trigger trigger = newTrigger()
                 .startNow()
@@ -33,17 +34,21 @@ public class SchedulerMain {
         scheduler.scheduleJob(jobDetail, trigger);
     }
 
-    public static class HelloJob implements Job {
+    public static class DailyScheduleJob implements Job {
         
         @Override
         public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            logger.info("HelloJob executed");
-            try {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Date date = new Date();
+            date.setTime(timestamp.getTime());
+            String formattedDate = new SimpleDateFormat("yyyyMMdd").format(date);
+            logger.info("DailyScheduleJob: Create CSV + SFTP = Executed - %s", formattedDate);
+            // try {
                 
-            }
-            catch (Exception e) {
+            // }
+            // catch (Exception e) {
                 
-            }
+            // }
 
         }
         
