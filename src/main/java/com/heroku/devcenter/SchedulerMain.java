@@ -43,7 +43,7 @@ public class SchedulerMain {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             Date date = new Date();
             date.setTime(timestamp.getTime());
-            String formattedDate = new SimpleDateFormat("yyyyMMdd").format(date);
+            String formattedDate = new SimpleDateFormat("dd-mmm-yyyy hh:mm:ss.s").format(date);
             logger.info("DailyScheduleJob: Create CSV + SFTP = Executed - {}", formattedDate);
             // try {
                 
